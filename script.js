@@ -58,22 +58,53 @@ function checkViewport() {
   }
 }
 
+// function highlightCurrentSection() {
+//   const sections = document.querySelectorAll("section");
+//   const navLinks = document.querySelectorAll(".nav-links a");
+//   const sidebarLinks = document.querySelectorAll(".sidebar a");
+
+//   let index = sections.length;
+
+//   while (--index && window.scrollY + 100 < sections[index].offsetTop) {}
+
+//   navLinks.forEach((link) => link.classList.remove("active"));
+//   sidebarLinks.forEach((link) => link.classList.remove("active"));
+
+//   if (index >= 0) {
+//     navLinks[index]?.classList.add("active");
+//     sidebarLinks[index]?.classList.add("active");
+//   }
+// }
 function highlightCurrentSection() {
   const sections = document.querySelectorAll("section");
   const navLinks = document.querySelectorAll(".nav-links a");
   const sidebarLinks = document.querySelectorAll(".sidebar a");
 
-  let index = sections.length;
+  let currentSection = "";
 
-  while (--index && window.scrollY + 100 < sections[index].offsetTop) {}
+  sections.forEach((section) => {
+    const sectionTop = section.offsetTop - 150;
 
-  navLinks.forEach((link) => link.classList.remove("active"));
-  sidebarLinks.forEach((link) => link.classList.remove("active"));
+    if (window.scrollY >= sectionTop) {
+      currentSection = section.id;
+    }
+  });
 
-  if (index >= 0) {
-    navLinks[index]?.classList.add("active");
-    sidebarLinks[index]?.classList.add("active");
-  }
+  navLinks.forEach((link) => {
+    link.classList.remove("active");
+
+    if (link.getAttribute("href") === `#${currentSection}`) {
+      link.classList.add("active");
+    }
+  });
+
+  sidebarLinks.forEach((link) => {
+    link.classList.remove("active");
+
+    if (link.getAttribute("href") === `#${currentSection}`) {
+      link.classList.add("active");
+    }
+  });
 }
 
 function downloadResume() {
@@ -88,3 +119,4 @@ checkViewport();
 window.addEventListener("resize", checkViewport);
 
 window.addEventListener("scroll", highlightCurrentSection);
+window.addEventListener("load", highlightCurrentSection);
